@@ -33,7 +33,6 @@ class PengetahuanController extends Controller
 
     public function store(Request $request)
     {
-
         $kode_penyakit = $request->kode_penyakit;
         if (!$kode_penyakit) {
             return redirect()->back()->withErrors(['msg', 'Penyakit belum dipilih']);
@@ -45,28 +44,13 @@ class PengetahuanController extends Controller
             $params[] = [
                 'kode_penyakit' => $kode_penyakit,
                 'kode_gejala' => $kode_gejala,
-                'mb' => $request->mb[$key],
-                'md' => $request->md[$key],
+                'mb' => $request->mb[$kode_gejala],
+                'md' => $request->md[$kode_gejala],
                 'created_at' => date('Y-m-d'),
                 'updated_at' => date('Y-m-d')
             ];
         }
         $this->pengetahuan->insert($params);
         return redirect('pengetahuan?kode_penyakit='.$kode_penyakit);
-    }
-
-    public function edit()
-    {
-
-    }
-
-    public function update()
-    {
-
-    }
-
-    public function delete()
-    {
-
     }
 }

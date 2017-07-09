@@ -34,8 +34,8 @@
                                 @foreach ($gejalas as $gejala)
                                     <tr>
                                         <td>{{$gejala->kode_gejala}}</td>
-                                        <td>{{$gejala->pertanyaan}}</td>
                                         <td>{{$gejala->nama_gejala}}</td>
+                                        <td>{{$gejala->pertanyaan}}</td>
                                         <td>{{$gejala->desc}}</td>
                                         <td><img width="200" src="{{asset($gejala->image ? 'storage/'.$gejala->image : 'img/default-placeholder.png')}}" alt=""/></td>
                                         <td>

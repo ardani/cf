@@ -15,7 +15,7 @@ class GejalaController extends Controller
 
     public function index()
     {
-        $data['gejalas'] = $this->gejala->paginate(30);
+        $data['gejalas'] = $this->gejala->paginate(10);
         return view('pages.gejala.index', $data);
     }
 

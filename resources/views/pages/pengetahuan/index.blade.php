@@ -66,14 +66,14 @@
                                         <td>
                                             <div class="checkbox">
                                                 <label for="">
-                                                    <input type="checkbox" {{$checked ? 'checked' : ''}} name="kode_gejala[]" value="{{$gejala->kode_gejala}}"/>
+                                                    <input type="checkbox" {{$checked ? 'checked' : ''}} name="kode_gejala[{{$gejala->kode_gejala}}]" value="{{$gejala->kode_gejala}}"/>
                                                     {{$gejala->kode_gejala}}
                                                 </label>
                                             </div>
                                         </td>
                                         <td>{{$gejala->nama_gejala}}</td>
-                                        <td><input type="text" class="form-control" name="mb[]" value="{{$mb}}" placeholder="MB"></td>
-                                        <td><input type="text" class="form-control" name="md[]" value="{{$md}}" placeholder="MD"></td>
+                                        <td><input type="text" class="form-control" name="mb[{{$gejala->kode_gejala}}]" value="{{$mb}}" placeholder="MB"></td>
+                                        <td><input type="text" class="form-control" name="md[{{$gejala->kode_gejala}}]" value="{{$md}}" placeholder="MD"></td>
                                     </tr>
                                 @endforeach
                                 </tbody>

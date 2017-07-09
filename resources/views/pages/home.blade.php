@@ -12,7 +12,7 @@
                        <strong>Halaman Utama</strong>
                    </div>
                    <div class="card-block">
-                       <h2>Certainly Factor</h2>
+                       <h2>Certainly Factor Penyakit Mata</h2>
                    </div>
                </div>
            </div>

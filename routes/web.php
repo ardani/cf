@@ -12,7 +12,10 @@
 */
 
 Route::get('/','MainController@index');
-Route::post('/','MainController@process');
+Route::get('blog','MainController@getPengetahuan');
+Route::get('hasil','MainController@getHasil');
+Route::get('konsultasi','MainController@getKonsultasi');
+Route::post('konsultasi','MainController@getKonsultasi');
 
 Auth::routes();
 Route::get('home', 'HomeController@index')->name('home');
@@ -36,9 +39,6 @@ Route::post('option/create', 'OptionController@store');
 Route::get('option/{id}/edit', 'OptionController@edit');
 Route::post('option/{id}/edit', 'OptionController@update');
 Route::get('option/{id}/delete', 'OptionController@delete');
-
-Route::get('hasil', 'HasilController@index');
-Route::post('hasil/proses', 'HasilController@proses');
 
 Route::get('pengetahuan', 'PengetahuanController@index');
 Route::post('pengetahuan/create', 'PengetahuanController@store');

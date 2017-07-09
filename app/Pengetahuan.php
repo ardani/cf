@@ -13,4 +13,9 @@ class Pengetahuan extends Model
     {
         return $this->belongsTo(Gejala::class, 'kode_gejala');
     }
+
+    public function penyakit()
+    {
+        return $this->belongsTo(Penyakit::class, 'kode_penyakit');
+    }
 }
