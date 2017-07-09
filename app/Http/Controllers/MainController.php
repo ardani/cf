@@ -90,8 +90,6 @@ class MainController extends Controller
             if ($hasil_jawaban == -1) {
                 $no_answer = array_merge(session('no_answer', []), [$gejala => $hasil_jawaban]);
                 session(['no_answer' => $no_answer]);
-                // hapus rule sebelumnya dari list rule
-                //unset($rules[$rule_position]);
                 // hapus rule yang memiliki hasil jawaban -1 dari list rule
                 $filtered = collect($rules)->filter(function ($value, $key) use ($gejala) {
                     if (in_array($gejala, $value)) {
