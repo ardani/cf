@@ -36,7 +36,8 @@ class PenyakitController extends Controller
             'kode_penyakit' => autonumber('penyakit', 'kode_penyakit', 'P'),
             'image' => $path,
             'nama_penyakit' => $request->nama_penyakit,
-            'desc' => $request->desc
+            'desc' => $request->desc,
+            'solusi' => $request->solusi
         ]);
         return redirect('penyakit')->with('status', 'Data Berhasil Ditambahkan');
     }
@@ -56,6 +57,7 @@ class PenyakitController extends Controller
         }
 
         $penyakit->nama_penyakit = $request->nama_penyakit;
+        $penyakit->solusi = $request->solusi;
         $penyakit->desc = $request->desc;
         $penyakit->save();
         return redirect('penyakit')->with('status', 'Data Berhasil Diperbarui');
