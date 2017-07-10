@@ -26,7 +26,7 @@
                                        <tr>
                                            <td>{{$no}}</td>
                                            <td>{{$gejala->nama_gejala}}</td>
-                                           <td>{{$options[$answers[$gejala->kode_gejala]]->nama}}</td>
+                                           <td>{{$options['nilai-'.$answers[$gejala->kode_gejala]]->nama}}</td>
                                        </tr>
                                        <?php $no++?>
                                    @endforeach
@@ -34,7 +34,7 @@
                                        <tr>
                                            <td>{{$no}}</td>
                                            <td>{{$gejala->nama_gejala}}</td>
-                                           <td>{{$options[$answers[$gejala->kode_gejala]]->nama}}</td>
+                                           <td>{{$options['nilai-'.$answers[$gejala->kode_gejala]]->nama}}</td>
                                        </tr>
                                        <?php $no++?>
                                    @endforeach
@@ -48,6 +48,7 @@
                                         <tr>
                                             <th>Penyakit</th>
                                             <th>Nilai</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                    <tbody>
@@ -60,6 +61,28 @@
                                         <tr>
                                             <td><a target="_blank" href="{{url('blog?kode_penyakit='.$key)}}">{{$result['data']->nama_penyakit}}</a></td>
                                             <td>{{$result['nilai']}} -> {{$result['nilai']*100}}%</td>
+                                            <td><a data-toggle="collapse" href="#rumus-{{$key}}">Rumus</a></td>
+                                        </tr>
+                                        <tr id="rumus-{{$key}}" class="collapse collapsing">
+                                            <td colspan="3">
+                                                <p>Nilai CF Pakar * CF User</p>
+                                                <ul>
+                                                    <?php $no = 1 ?>
+                                                    @foreach($rumus[$key]['cf_pakar_user'] as $row)
+                                                        <li>CF {{$no}} : {{number_format($row,2)}}</li>
+                                                        <?php $no++ ?>
+                                                    @endforeach
+                                                </ul>
+                                                <p>Nilai CF Combine</p>
+                                                <ul>
+                                                    <li>CF old (CF 1 dan CF 2) = {{number_format($row,2)}}</li>
+                                                    @foreach($rumus[$key]['cf_combine'] as $key => $row)
+                                                        @if($key > 1)
+                                                            <li>(CF {{$key+2}} dan CF old) = {{number_format($row,5)}}</li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
+                                            </td>
                                         </tr>
                                     @endforeach
                                    </tbody>

@@ -15,6 +15,7 @@ class MainController extends Controller
     private $pengetahuan;
     private $penyakit;
     private $skip_rules;
+    private $rumus = [];
 
     public function __construct(Gejala $gejala, Option $option, Pengetahuan $pengetahuan, Penyakit $penyakit)
     {
@@ -47,15 +48,21 @@ class MainController extends Controller
         $gejala_yes = $this->gejalas->whereIn('kode_gejala', $yes_key)->get();
         $gejala_no = $this->gejalas->whereIn('kode_gejala', $no_key)->get();
         $options = $this->options->get();
-        $options = $options->keyBy('nilai')->all();
+        $options = $options->keyBy(function($item){
+            return 'nilai-'.$item['nilai'];
+        })->all();
         $answers = array_merge(session('yes_answer'), session('no_answer'));
+        if (!$answers) {
+            return redirect('/');
+        }
         $results = $this->perhitunganCF();
         $data = [
             'gejala_yes' => $gejala_yes,
             'gejala_no' => $gejala_no,
             'answers' => $answers,
             'results' => $results,
-            'options' => $options
+            'options' => $options,
+            'rumus' => $this->rumus
         ];
         return view('pages.hasil', $data);
     }
@@ -168,14 +175,17 @@ class MainController extends Controller
 
                 $cfs[$rule][] = round(($data_gejala->mb - $data_gejala->md) * $answer[$gejala], 3);
             }
+            $this->rumus[$rule]['cf_pakar_user'] = $cfs[$rule];
         }
         // perhitungan cf combine
         $CF_combine = [];
         foreach ($cfs as $rule => $cf) {
             $cf_old[$rule] = $this->CFCombine($cf[0], $cf[1]);
+            $this->rumus[$rule]['cf_combine'][] = $cf_old[$rule];
             foreach ($cf as $key => $value) {
                 if ($key > 1) {
                     $cf_old[$rule] = $this->CFCombine($value, $cf_old[$rule]);
+                    $this->rumus[$rule]['cf_combine'][] = $cf_old[$rule];
                 }
             }
 
