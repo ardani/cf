@@ -37,7 +37,7 @@
                                         <td>{{$penyakit->nama_penyakit}}</td>
                                         <td>{{$penyakit->desc}}</td>
                                         <td>{{$penyakit->solusi}}</td>
-                                        <td><img width="200" src="{{asset($penyakit->image ?:'img/default-placeholder.png')}}" alt=""/></td>
+                                        <td><img width="200" src="{{asset($penyakit->image ?'storage/'.$penyakit->image:'img/default-placeholder.png')}}" alt=""/></td>
                                         <td>
                                             <a href="{{url('penyakit/' .$penyakit->kode_penyakit.'/edit')}}"><i class="fa fa-pencil"></i> edit</a>
                                             <a href="{{url('penyakit/' .$penyakit->kode_penyakit.'/delete')}}" class="act-delete"><i class="fa fa-remove"></i> delete</a>
