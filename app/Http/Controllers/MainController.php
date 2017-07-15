@@ -19,6 +19,7 @@ class MainController extends Controller
 
     public function __construct(Gejala $gejala, Option $option, Pengetahuan $pengetahuan, Penyakit $penyakit)
     {
+        //untuk mengambil data gejala, option, pengetahuan, penyakit
         $this->gejalas = $gejala;
         $this->options = $option;
         $this->pengetahuan = $pengetahuan;
@@ -33,10 +34,15 @@ class MainController extends Controller
     public function index()
     {
         // reset session data
+
+        //yes / no answer itu untuk pilihan jawaban No -- -1
         session(['yes_answer'=> []]);
         session(['no_answer'=> []]);
+        //untuk menampung semua rule backward
         session(['rules'=> []]);
+        //rule yang aktif saat ini dan akan update terus
         session(['rule_position' => 'P01']);
+        //rule yang sudah dilewati
         session(['skip_rules' => []]);
         return view('pages.main');
     }
@@ -94,7 +100,8 @@ class MainController extends Controller
         $rules = session('rules');
         $rule_position = session('rule_position');
         if ($gejala) {
-            if ($hasil_jawaban == -1) {
+            $tipe = $this->getSkipNilaiGejala($gejala);
+            if ($hasil_jawaban == $tipe) {
                 $no_answer = array_merge(session('no_answer', []), [$gejala => $hasil_jawaban]);
                 session(['no_answer' => $no_answer]);
                 // hapus rule yang memiliki hasil jawaban -1 dari list rule
@@ -130,7 +137,9 @@ class MainController extends Controller
     private function skipRules($skip_rules)
     {
         $rules = session('rules');
+        //update skiprules dengan data rule yang sudah dilewati
         session(['skip_rules' => $skip_rules]);
+        //untuk menentukan next sub goal
         $rule_position = collect($rules)->filter(function ($value, $key) use ($skip_rules) {
             return !in_array($key, $skip_rules);
         })->keys()->sort();
@@ -151,7 +160,7 @@ class MainController extends Controller
             ->diff($answer)
             ->sort()
             ->first();
-
+        //ini untuk skip pertanyaan apabila subgoal bagian dari subgoal lain (gejala sudah dijawab sebelumnya)
         if (!$kode_gejala && (count(session('skip_rules')) <= $this->penyakit->count())) {
             $skip_rules = array_merge(session('skip_rules'), [session('rule_position')]);
             $this->skipRules($skip_rules);
@@ -164,6 +173,7 @@ class MainController extends Controller
     private function perhitunganCF()
     {
         $rules = session('rules');
+        //untuk menggabungkan jawaban user dari YES dan NO
         $answer = array_merge(session('yes_answer'), session('no_answer'));
         $cfs = [];
         foreach ($rules as $rule => $gejalas) {
@@ -172,7 +182,7 @@ class MainController extends Controller
                     ->where('kode_penyakit', $rule)
                     ->where('kode_gejala', $gejala)
                     ->first();
-
+                //mengkalikan CF user dan CF pakar
                 $cfs[$rule][] = round(($data_gejala->mb - $data_gejala->md) * $answer[$gejala], 3);
             }
             $this->rumus[$rule]['cf_pakar_user'] = $cfs[$rule];
@@ -184,7 +194,7 @@ class MainController extends Controller
             $this->rumus[$rule]['cf_combine'][] = $cf_old[$rule];
             foreach ($cf as $key => $value) {
                 if ($key > 1) {
-                    $cf_old[$rule] = $this->CFCombine($value, $cf_old[$rule]);
+                    $cf_old[$rule] = $this->CFCombine($cf_old[$rule], $value);
                     $this->rumus[$rule]['cf_combine'][] = $cf_old[$rule];
                 }
             }
@@ -198,7 +208,7 @@ class MainController extends Controller
         $CF_combine = collect($CF_combine)->sortByDesc('nilai')->all();
         return $CF_combine;
     }
-
+    //untuk menentukan rumus CF combine yang dipakai
     private function CFCombine($cf1, $cf2)
     {
         if ($cf1 >= 0 && $cf2 >= 0) {
@@ -252,5 +262,10 @@ class MainController extends Controller
         })->get();
         $data = ['penyakits' => $penyakits];
         return view('pages.pengetahuan', $data);
+    }
+
+    private function getSkipNilaiGejala($kode_gejala)
+    {
+        return $this->gejalas->find($kode_gejala)->tipe == '1' ? '0' : '1';
     }
 }

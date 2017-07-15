@@ -40,6 +40,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="textarea-input">Jenis Pertanyaan</label>
+                                    <div class="col-md-9">
+                                        <select name="tipe" class="form-control">
+                                            <option value="1" {{$gejala->tipe == 1 ? 'selected' : ''}}>Positif</option>
+                                            <option value="0" {{$gejala->tipe == 0 ? 'selected' : ''}}>Negatif</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="file-input">Image</label>
                                     <div class="col-md-9">
                                         <input type="file" id="file-input" name="image">

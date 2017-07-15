@@ -77,7 +77,7 @@
                                                 <ul>
                                                     <li>CF old (CF 1 dan CF 2) = {{number_format($row,2)}}</li>
                                                     @foreach($rumus[$key]['cf_combine'] as $key => $row)
-                                                        @if($key > 1)
+                                                        @if($key > 0)
                                                             <li>(CF {{$key+2}} dan CF old) = {{number_format($row,5)}}</li>
                                                         @endif
                                                     @endforeach

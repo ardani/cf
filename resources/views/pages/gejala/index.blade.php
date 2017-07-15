@@ -26,6 +26,7 @@
                                     <th width="15%">Nama Gejala</th>
                                     <th>Pertanyaan</th>
                                     <th width="40%">Deskripsi</th>
+                                    <th>Tipe Pertanyaan</th>
                                     <th>Image</th>
                                     <th width="15%">Aksi</th>
                                 </tr>
@@ -37,6 +38,7 @@
                                         <td>{{$gejala->nama_gejala}}</td>
                                         <td>{{$gejala->pertanyaan}}</td>
                                         <td>{{$gejala->desc}}</td>
+                                        <td>{{$gejala->tipe == 1 ? 'positif' : 'negatif'}}</td>
                                         <td><img width="200" src="{{asset($gejala->image ? 'storage/'.$gejala->image : 'img/default-placeholder.png')}}" alt=""/></td>
                                         <td>
                                             <a href="{{url('gejala/' .$gejala->kode_gejala.'/edit')}}"><i class="fa fa-pencil"></i> edit</a>
