@@ -117,7 +117,6 @@ class MainController extends Controller
                 $skip_rules = array_merge(session('skip_rules'), $skip_rules);
                 $this->skipRules($skip_rules);
             } else {
-                $hasil_jawaban = $hasil_jawaban == 0 ? 1 : $hasil_jawaban;
                 // simpan jawaban yes ke session
                 $yes_answer = array_merge(session('yes_answer', []), [$gejala => $hasil_jawaban]);
                 session(['yes_answer' => $yes_answer]);
@@ -184,6 +183,7 @@ class MainController extends Controller
                     ->where('kode_gejala', $gejala)
                     ->first();
                 //mengkalikan CF user dan CF pakar
+                $answer[$gejala] = $answer[$gejala] == 0 ? 1 : $answer[$gejala];
                 $cf_pakar_user[$rule][$gejala] = $cfs[$rule][] = round(($data_gejala->mb - $data_gejala->md) * $answer[$gejala], 3);
             }
             $this->rumus[$rule]['cf_pakar_user'] = $cf_pakar_user[$rule];
