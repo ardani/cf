@@ -25,7 +25,7 @@
                                    @foreach($gejala_yes as $gejala)
                                        <tr>
                                            <td>{{$no}}</td>
-                                           <td>{{$gejala->nama_gejala}}</td>
+                                           <td>({{$gejala->kode_gejala}}) {{$gejala->nama_gejala}}</td>
                                            <td>{{$options['nilai-'.$answers[$gejala->kode_gejala]]->nama}}</td>
                                        </tr>
                                        <?php $no++?>
@@ -33,7 +33,7 @@
                                    @foreach($gejala_no as $gejala)
                                        <tr>
                                            <td>{{$no}}</td>
-                                           <td>{{$gejala->nama_gejala}}</td>
+                                           <td>({{$gejala->kode_gejala}}) {{$gejala->nama_gejala}}</td>
                                            <td>{{$options['nilai-'.$answers[$gejala->kode_gejala]]->nama}}</td>
                                        </tr>
                                        <?php $no++?>
@@ -68,17 +68,17 @@
                                                 <p>Nilai CF Pakar * CF User</p>
                                                 <ul>
                                                     <?php $no = 1 ?>
-                                                    @foreach($rumus[$key]['cf_pakar_user'] as $row)
-                                                        <li>CF {{$no}} : {{number_format($row,2)}}</li>
+                                                    @foreach($rumus[$key]['cf_pakar_user'] as $gejala => $row)
+                                                        <li>CF {{$no}} ({{$gejala}}) : {{number_format($row,2)}}</li>
                                                         <?php $no++ ?>
                                                     @endforeach
                                                 </ul>
                                                 <p>Nilai CF Combine</p>
                                                 <ul>
                                                     <li>CF old (CF 1 dan CF 2) = {{number_format($row,2)}}</li>
-                                                    @foreach($rumus[$key]['cf_combine'] as $key => $row)
-                                                        @if($key > 0)
-                                                            <li>(CF {{$key+2}} dan CF old) = {{number_format($row,5)}}</li>
+                                                    @foreach($rumus[$key]['cf_combine'] as $no => $row)
+                                                        @if($no > 0)
+                                                            <li>(CF {{$no+2}} dan CF old) = {{number_format($row,5)}}</li>
                                                         @endif
                                                     @endforeach
                                                 </ul>

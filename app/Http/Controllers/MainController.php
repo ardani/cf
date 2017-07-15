@@ -102,7 +102,7 @@ class MainController extends Controller
         if ($gejala) {
             $tipe = $this->getSkipNilaiGejala($gejala);
             if ($hasil_jawaban == $tipe) {
-                $no_answer = array_merge(session('no_answer', []), [$gejala => $hasil_jawaban]);
+                $no_answer = array_merge(session('no_answer', []), [$gejala => 0]);
                 session(['no_answer' => $no_answer]);
                 // hapus rule yang memiliki hasil jawaban -1 dari list rule
                 $filtered = collect($rules)->filter(function ($value, $key) use ($gejala) {
@@ -117,6 +117,7 @@ class MainController extends Controller
                 $skip_rules = array_merge(session('skip_rules'), $skip_rules);
                 $this->skipRules($skip_rules);
             } else {
+                $hasil_jawaban = $hasil_jawaban == 0 ? 1 : $hasil_jawaban;
                 // simpan jawaban yes ke session
                 $yes_answer = array_merge(session('yes_answer', []), [$gejala => $hasil_jawaban]);
                 session(['yes_answer' => $yes_answer]);
@@ -183,9 +184,9 @@ class MainController extends Controller
                     ->where('kode_gejala', $gejala)
                     ->first();
                 //mengkalikan CF user dan CF pakar
-                $cfs[$rule][] = round(($data_gejala->mb - $data_gejala->md) * $answer[$gejala], 3);
+                $cf_pakar_user[$rule][$gejala] = $cfs[$rule][] = round(($data_gejala->mb - $data_gejala->md) * $answer[$gejala], 3);
             }
-            $this->rumus[$rule]['cf_pakar_user'] = $cfs[$rule];
+            $this->rumus[$rule]['cf_pakar_user'] = $cf_pakar_user[$rule];
         }
         // perhitungan cf combine
         $CF_combine = [];
@@ -266,6 +267,7 @@ class MainController extends Controller
 
     private function getSkipNilaiGejala($kode_gejala)
     {
-        return $this->gejalas->find($kode_gejala)->tipe == '1' ? '0' : '1';
+        // return nilai skip rule
+        return $this->gejalas->find($kode_gejala)->tipe == 1 ? 0 : 1;
     }
 }
